@@ -15,7 +15,11 @@ public class Task {
     private Date dueDate;
     private String status;
 
+    @Enumerated(EnumType.ORDINAL)
+    private Priority priority;
+
     public Task() {
+        priority = Priority.MEDIUM;
     }
 
     public Task(String title, String description, Date dueDate, String status) {
@@ -61,10 +65,23 @@ public class Task {
         this.status = status;
     }
 
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = Priority.values()[priority];
+    }
+
     public void update(Task updateTask) {
         this.title = updateTask.title;
         this.description = updateTask.description;
         this.dueDate = updateTask.dueDate;
+        this.priority = updateTask.priority;
         this.status = updateTask.status;
     }
 }

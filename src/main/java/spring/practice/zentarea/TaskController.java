@@ -2,19 +2,21 @@ package spring.practice.zentarea;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import spring.practice.zentarea.data.TaskRepository;
-import spring.practice.zentarea.model.Priority;
+import spring.practice.zentarea.data.managers.TaskCommentManager;
+import spring.practice.zentarea.data.repo.TaskRepository;
 import spring.practice.zentarea.model.Task;
 import spring.practice.zentarea.utils.exceptions.TaskNotFoundException;
 
 @RestController
 @RequestMapping("/tasks")
-public class TaskController {
+public final class TaskController {
     private final TaskRepository taskRepository;
+    public final TaskCommentManager commentManager;
 
     @Autowired
-    public TaskController(TaskRepository taskRepository) {
+    public TaskController(TaskRepository taskRepository, TaskCommentManager commentManager) {
         this.taskRepository = taskRepository;
+        this.commentManager = commentManager;
     }
 
     @PostMapping
@@ -40,4 +42,6 @@ public class TaskController {
     public void deleteTask(@PathVariable Long taskId) {
         taskRepository.deleteById(taskId);
     }
+
+
 }

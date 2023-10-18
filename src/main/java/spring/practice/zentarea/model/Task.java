@@ -3,13 +3,16 @@ package spring.practice.zentarea.model;
 import jakarta.persistence.*;
 import spring.practice.zentarea.utils.exceptions.NotImplementedException;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "task")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "task_id")
     private Long taskId;
 
     private String title;
@@ -52,7 +55,7 @@ public class Task {
         this.status = status;
     }
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private TaskPriority priority;
 
     public TaskPriority getPriority() {
@@ -107,7 +110,7 @@ public class Task {
         this.status = updateTask.status;
     }
 
-    public enum TaskPriority {
+    public enum TaskPriority implements Serializable {
         HIGH(1), MEDIUM(2), LOW(3);
 
         private final int priority;

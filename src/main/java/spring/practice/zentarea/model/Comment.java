@@ -6,13 +6,16 @@ import org.springframework.lang.NonNull;
 import java.util.Date;
 
 @Entity
+@Table(name = "comment")
 public final class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cmtID;
+    @Column(name = "cmt_id")
+    private Long cmtId;
 
-    private final Long taskID;
+    @Column(name = "task_id")
+    private final Long taskId;
     @Lob
     private String comment;
 
@@ -36,15 +39,15 @@ public final class Comment {
     }
 
     public Comment() {
-        this.taskID = null;
+        this.taskId = null;
     }
 
-    public Comment(@NonNull Long taskID) {
-        this.taskID = taskID;
+    public Comment(@NonNull Long taskId) {
+        this.taskId = taskId;
     }
 
-    public Comment(@NonNull Long taskID, String commentText) {
-        this.taskID = taskID;
+    public Comment(@NonNull Long taskId, String commentText) {
+        this.taskId = taskId;
         this.comment = commentText;
         this.date = new Date();
     }

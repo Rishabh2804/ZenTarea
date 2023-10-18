@@ -12,6 +12,7 @@ import spring.practice.zentarea.utils.exceptions.TaskNotFoundException;
 import java.util.List;
 
 @Service
+@RequestMapping("/comments")
 public class TaskCommentManagerImpl implements TaskCommentManager {
     private final CommentRepository commentRepository;
 

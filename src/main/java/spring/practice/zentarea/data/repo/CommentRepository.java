@@ -8,7 +8,7 @@ import spring.practice.zentarea.model.Comment;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query("SELECT c FROM Comment c WHERE c.taskID = :task_id")
+    @Query("SELECT c FROM Comment c WHERE c.taskId = :task_id")
     List<Comment> findByTaskID(@Param("task_id") Long taskId);
 
 }

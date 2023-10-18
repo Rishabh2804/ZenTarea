@@ -59,7 +59,7 @@ public interface TaskCommentController {
      * @param commentId - the id of the comment to delete
      * @throws CommentNotFoundException - if the comment is not found
      **/
-    void deleteComment(Long taskId, Long commentId) throws CommentNotFoundException;
+    void deleteComment(Long taskId, Long commentId) throws CommentNotFoundException, TaskNotFoundException;
 
     /**
      * Deletes all the comments for a task

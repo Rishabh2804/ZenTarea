@@ -1,8 +1,8 @@
 package spring.practice.zentarea.data.controllers;
 
-import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import spring.practice.zentarea.data.repo.CommentRepository;
 import spring.practice.zentarea.data.repo.TaskRepository;
@@ -26,9 +26,9 @@ public class TaskCommentControllerImpl implements TaskCommentController {
     @Override
     @PostMapping(produces = "application/json")
     public ResponseEntity<Comment> addCommentToTask(@RequestBody String commentText, @PathVariable Long taskId) {
-        Comment comment = new Comment(taskId, commentText);
-
-        return ResponseEntity.ok(commentRepository.save(comment));
+        return ResponseEntity.ok(commentRepository.save(
+                new Comment(taskId, commentText)
+        ));
     }
 
     @Override
@@ -58,16 +58,15 @@ public class TaskCommentControllerImpl implements TaskCommentController {
             produces = "application/json"
     )
     public void deleteComment(@PathVariable Long taskId, @PathVariable Long commentId) throws CommentNotFoundException {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-        commentRepository.delete(comment);
         commentRepository.deleteById(commentId);
     }
 
     @Override
+    @Transactional
     @DeleteMapping(
             produces = "application/json"
     )
-    public void deleteAllCommentsForTask(@PathVariable Long taskId) throws TaskNotFoundException {
+    public void deleteAllCommentsForTask(@PathVariable Long taskId) {
         commentRepository.deleteAllByTaskId(taskId);
     }
 }

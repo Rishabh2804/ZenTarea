@@ -1,5 +1,6 @@
-package spring.practice.zentarea.data.managers;
+package spring.practice.zentarea.data.controllers;
 
+import org.springframework.http.ResponseEntity;
 import spring.practice.zentarea.model.Comment;
 import spring.practice.zentarea.model.Task;
 import spring.practice.zentarea.utils.exceptions.CommentNotFoundException;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * TaskCommentManager is an interface that defines the methods that can be used to manage comments for a task
  */
-public interface TaskCommentManager {
+public interface TaskCommentController {
 
     /**
      * Adds a comment to a task, and returns the created task
@@ -19,7 +20,7 @@ public interface TaskCommentManager {
      * @param taskId  - the id of the task to add the comment to
      * @return {@link Comment}
      **/
-    Comment addCommentToTask(String comment, Long taskId);
+    ResponseEntity<Comment> addCommentToTask(String comment, Long taskId);
 
     /**
      * Returns all the comments for a task
@@ -28,7 +29,7 @@ public interface TaskCommentManager {
      * @return {@link List}<{@link Comment}>
      * @throws TaskNotFoundException - if the task is not found
      **/
-    List<Comment> getCommentsForTask(Long taskId) throws TaskNotFoundException;
+    ResponseEntity<List<Comment>> getCommentsForTask(Long taskId) throws TaskNotFoundException;
 
 //    /**
 //     * Returns a specific comment for a task
@@ -49,7 +50,7 @@ public interface TaskCommentManager {
      * @return {@link Task}
      * @throws CommentNotFoundException - if the comment is not found
      **/
-    Comment updateCommentForTask(Long taskId, Long commentId, String comment) throws CommentNotFoundException;
+    ResponseEntity<Comment> updateCommentForTask(Long taskId, Long commentId, String comment) throws CommentNotFoundException;
 
     /**
      * Deletes a specific comment for a task

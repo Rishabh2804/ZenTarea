@@ -1,18 +1,32 @@
 package spring.practice.zentarea.model;
 
 import jakarta.persistence.*;
-import org.springframework.lang.NonNull;
+import org.springframework.format.annotation.*;
+import org.springframework.lang.*;
 
-import java.util.Date;
+import java.util.*;
 
 @Entity
+@Table(name = "comment")
+@SuppressWarnings("unused")
 public final class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cmtID;
+    @Column(name = "cmt_id")
+    private Long cmtId;
 
-    private final Long taskID;
+    public Long getCmtId() {
+        return cmtId;
+    }
+
+    @Column(name = "task_id")
+    private final Long taskId;
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
     @Lob
     private String comment;
 
@@ -25,27 +39,25 @@ public final class Comment {
     }
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date date;
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public Comment() {
-        this.taskID = null;
+        this.taskId = null;
     }
 
-    public Comment(@NonNull Long taskID) {
-        this.taskID = taskID;
-    }
-
-    public Comment(@NonNull Long taskID, String commentText) {
-        this.taskID = taskID;
+    public Comment(@NonNull Long taskId, String commentText) {
+        this.taskId = taskId;
         this.comment = commentText;
+        this.date = new Date();
+    }
+
+    public void update(@NonNull Comment comment) {
+        this.comment = comment.getComment();
         this.date = new Date();
     }
 }

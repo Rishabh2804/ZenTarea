@@ -18,10 +18,21 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    // Jetbrains annotation library
+    implementation("org.jetbrains:annotations:24.0.0")
+    implementation("org.jetbrains:annotations:24.0.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("junit:junit:4.13.1")
 
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    implementation("mysql:mysql-connector-java:8.0.33")
+    runtimeOnly("mysql:mysql-connector-java:8.0.33")
+
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+    implementation("org.hibernate:hibernate-core:6.2.9.Final")
+
+    // https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api
+    implementation("javax.persistence:javax.persistence-api:2.2")
 }
 
 tasks.withType<Test> {

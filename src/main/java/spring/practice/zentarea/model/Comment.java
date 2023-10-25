@@ -14,8 +14,17 @@ public final class Comment {
     @Column(name = "cmt_id")
     private Long cmtId;
 
+    public Long getCmtId() {
+        return cmtId;
+    }
+
     @Column(name = "task_id")
     private final Long taskId;
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
     @Lob
     private String comment;
 
@@ -34,16 +43,8 @@ public final class Comment {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public Comment() {
         this.taskId = null;
-    }
-
-    public Comment(@NonNull Long taskId) {
-        this.taskId = taskId;
     }
 
     public Comment(@NonNull Long taskId, String commentText) {

@@ -1,9 +1,7 @@
 package spring.practice.zentarea.model;
 
 import jakarta.persistence.*;
-import spring.practice.zentarea.utils.exceptions.NotImplementedException;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -15,14 +13,14 @@ public class Task {
     @Column(name = "task_id")
     private Long taskId;
 
+    public Long getTaskId() {
+        return taskId;
+    }
+
     private String title;
 
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     private String description;
@@ -31,28 +29,16 @@ public class Task {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     private Date dueDate;
 
     public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
-    }
-
     private String status;
 
     public String getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     @Enumerated(EnumType.STRING)
@@ -62,44 +48,23 @@ public class Task {
         return priority;
     }
 
-    public void setPriority(TaskPriority taskPriority) {
-        this.priority = taskPriority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = TaskPriority.values()[priority];
+    // Setter necessary for custom editor,
+    // else default implementation will be followed for setting the value
+    // for the priority field
+    public void setPriority(String priority) {
+        this.priority = TaskPriority.parse(priority);
     }
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "task_id")
     private List<Comment> comments;
 
-    public Task() {
-        priority = TaskPriority.MEDIUM;
-    }
-
-    public Task(String title, String description, Date dueDate, String status) {
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.status = status;
-    }
-
     public List<Comment> getComments() {
         return comments;
     }
 
-    public void addComment(Comment comment) {
-        if (this.comments == null) this.comments = List.of(comment);
-        else this.comments.add(comment);
-    }
-
-    public String getComment(int index) throws NotImplementedException {
-        throw new NotImplementedException();
-    }
-
-    public void removeComment(int index) throws IndexOutOfBoundsException {
-        this.comments.remove(index);
+    public Task() {
+        priority = TaskPriority.MEDIUM;
     }
 
     public void update(Task updateTask) {
@@ -110,17 +75,4 @@ public class Task {
         this.status = updateTask.status;
     }
 
-    public enum TaskPriority implements Serializable {
-        HIGH(1), MEDIUM(2), LOW(3);
-
-        private final int priority;
-
-        TaskPriority(int priority) {
-            this.priority = priority;
-        }
-
-        public int getPriority() {
-            return priority;
-        }
-    }
 }

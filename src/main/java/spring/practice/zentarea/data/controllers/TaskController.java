@@ -1,16 +1,13 @@
 package spring.practice.zentarea.data.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.WebDataBinder;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import spring.practice.zentarea.data.repo.TaskRepository;
-import spring.practice.zentarea.model.Task;
-import spring.practice.zentarea.model.TaskPriority;
-import spring.practice.zentarea.utils.converters.TaskPriorityEditor;
-import spring.practice.zentarea.utils.exceptions.TaskNotFoundException;
+import spring.practice.zentarea.data.repo.*;
+import spring.practice.zentarea.model.*;
+import spring.practice.zentarea.utils.exceptions.*;
 
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 @RestController
 @RequestMapping("/tasks")
@@ -22,19 +19,12 @@ public final class TaskController {
         this.taskRepository = taskRepository;
     }
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(TaskPriority.class, new TaskPriorityEditor());
-    }
-
-    @GetMapping(
-            value = "/priority",
-            produces = "application/json"
-    )
-    public ResponseEntity<String> getTasks(@RequestParam(required = false) TaskPriority priority) {
-        return ResponseEntity.ok(priority.name());
-    }
-
+    /**
+     * Creates a task
+     *
+     * @param task - the task to create
+     * @return {@link ResponseEntity}<{@link Task}>
+     */
     @PostMapping(
             produces = "application/json"
     )
@@ -44,6 +34,13 @@ public final class TaskController {
         return ResponseEntity.ok(taskRepository.save(task));
     }
 
+    /**
+     * Return task by taskId
+     *
+     * @param taskId - the id of the task to get
+     * @return {@link ResponseEntity}<{@link Task}>
+     * @throws TaskNotFoundException - if the task is not found
+     */
     @GetMapping(value = "/{taskId}",
             produces = "application/json"
     )
@@ -54,6 +51,14 @@ public final class TaskController {
         );
     }
 
+    /**
+     * Updates a task
+     *
+     * @param taskId     - the id of the task to update
+     * @param updateTask - the updated task
+     * @return {@link ResponseEntity}<{@link Task}>
+     * @throws TaskNotFoundException - if the task is not found
+     */
     @PutMapping(value = "/{taskId}",
             produces = "application/json"
     )
@@ -65,6 +70,11 @@ public final class TaskController {
         return ResponseEntity.ok(taskRepository.save(existingTask));
     }
 
+    /**
+     * Deletes a task
+     *
+     * @param taskId - the id of the task to delete
+     */
     @DeleteMapping(value = "/{taskId}",
             produces = "application/json"
     )

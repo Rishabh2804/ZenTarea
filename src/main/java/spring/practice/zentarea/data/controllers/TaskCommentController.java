@@ -1,56 +1,78 @@
 package spring.practice.zentarea.data.controllers;
 
-import org.springframework.http.ResponseEntity;
-import spring.practice.zentarea.model.Comment;
-import spring.practice.zentarea.model.Task;
-import spring.practice.zentarea.utils.exceptions.CommentNotFoundException;
-import spring.practice.zentarea.utils.exceptions.TaskNotFoundException;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
+import org.springframework.transaction.annotation.*;
+import org.springframework.web.bind.annotation.*;
+import spring.practice.zentarea.data.repo.*;
+import spring.practice.zentarea.model.*;
+import spring.practice.zentarea.utils.exceptions.*;
 
-import java.util.List;
+import java.util.*;
 
-/**
- * TaskCommentManager is an interface that defines the methods that can be used to manage comments for a task
- */
-public interface TaskCommentController {
+@RestController
+@RequestMapping("tasks/{taskId}/comments")
+public class TaskCommentController {
+    private final CommentRepository commentRepository;
+
+    @Autowired
+    public TaskCommentController(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     /**
      * Adds a comment to a task, and returns the created task
      *
-     * @param comment - the comment to add to the task
-     * @param taskId  - the id of the task to add the comment to
-     * @return {@link Comment}
+     * @param commentText - the comment to add to the task
+     * @param taskId      - the id of the task to add the comment to
+     * @return {@link ResponseEntity}<{@link Comment}>
      **/
-    ResponseEntity<Comment> addCommentToTask(String comment, Long taskId);
+    @PostMapping(produces = "application/json")
+    public ResponseEntity<Comment> addCommentToTask(@RequestBody String commentText, @PathVariable Long taskId) {
+        return ResponseEntity.ok(commentRepository.save(
+                new Comment(taskId, commentText)
+        ));
+    }
 
     /**
      * Returns all the comments for a task
      *
      * @param taskId - the id of the task to get the comments for
-     * @return {@link List}<{@link Comment}>
+     * @return {@link ResponseEntity}<{@link List}<{@link Comment}>>
      * @throws TaskNotFoundException - if the task is not found
      **/
-    ResponseEntity<List<Comment>> getCommentsForTask(Long taskId) throws TaskNotFoundException;
+    @GetMapping(
+            produces = "application/json"
+    )
+    public ResponseEntity<List<Comment>> getCommentsForTask(@PathVariable Long taskId) throws TaskNotFoundException {
+        List<Comment> response = Optional.ofNullable(commentRepository.findByTaskID(taskId))
+                .orElse(Collections.emptyList());
 
-//    /**
-//     * Returns a specific comment for a task
-//     *
-//     * @param taskId    - the id of the task to get the comment for
-//     * @param commentId - the id of the comment to get
-//     * @return {@link Task}
-//     * @throws TaskNotFoundException - if the task is not found
-//     **/
-//    Task getCommentForTask(Long taskId, Long commentId) throws TaskNotFoundException;
+        return ResponseEntity.ok(response);
+    }
 
     /**
      * Updates a specific comment for a task, and returns the updated task
      *
-     * @param taskId    - the id of the task to update the comment for
-     * @param commentId - the id of the comment to update
-     * @param comment   - the updated comment
-     * @return {@link Task}
+     * @param taskId      - the id of the task to update the comment for
+     * @param commentId   - the id of the comment to update
+     * @param commentText - the updated comment
+     * @return {@link ResponseEntity}<{@link Comment}>
      * @throws CommentNotFoundException - if the comment is not found
      **/
-    ResponseEntity<Comment> updateCommentForTask(Long taskId, Long commentId, String comment) throws CommentNotFoundException;
+    @PutMapping(value = "/{commentId}",
+            produces = "application/json"
+    )
+    public ResponseEntity<Comment> updateCommentForTask(
+            @PathVariable Long taskId,
+            @PathVariable Long commentId,
+            @RequestBody String commentText
+    ) throws CommentNotFoundException, TaskNotFoundException {
+        return ResponseEntity
+                .ok(commentRepository
+                        .updateCommentByTaskIdAndCmtId(taskId, commentId, commentText)
+                        .orElseThrow(() -> new CommentNotFoundException(taskId, commentId)));
+    }
 
     /**
      * Deletes a specific comment for a task
@@ -59,7 +81,12 @@ public interface TaskCommentController {
      * @param commentId - the id of the comment to delete
      * @throws CommentNotFoundException - if the comment is not found
      **/
-    void deleteComment(Long taskId, Long commentId) throws CommentNotFoundException, TaskNotFoundException;
+    @DeleteMapping(value = "/{commentId}",
+            produces = "application/json"
+    )
+    public void deleteComment(@PathVariable Long taskId, @PathVariable Long commentId) throws CommentNotFoundException, TaskNotFoundException {
+        commentRepository.deleteCommentByTaskIdAndCmtId(taskId, commentId);
+    }
 
     /**
      * Deletes all the comments for a task
@@ -67,5 +94,11 @@ public interface TaskCommentController {
      * @param taskId - the id of the task to delete the comments for
      * @throws TaskNotFoundException - if the task is not found
      */
-    void deleteAllCommentsForTask(Long taskId) throws TaskNotFoundException;
+    @Transactional
+    @DeleteMapping(
+            produces = "application/json"
+    )
+    public void deleteAllCommentsForTask(@PathVariable Long taskId) throws TaskNotFoundException {
+        commentRepository.deleteAllByTaskId(taskId);
+    }
 }

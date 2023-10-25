@@ -1,12 +1,13 @@
 package spring.practice.zentarea.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.*;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "task")
+@SuppressWarnings("unused")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,8 @@ public class Task {
         return description;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date dueDate;
 
     public Date getDueDate() {

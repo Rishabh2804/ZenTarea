@@ -63,15 +63,19 @@ public class TaskCommentController {
     @PutMapping(value = "/{commentId}",
             produces = "application/json"
     )
-    public ResponseEntity<Comment> updateCommentForTask(
+    public ResponseEntity<Integer> updateCommentForTask(
             @PathVariable Long taskId,
             @PathVariable Long commentId,
             @RequestBody String commentText
     ) throws CommentNotFoundException, TaskNotFoundException {
-        return ResponseEntity
-                .ok(commentRepository
-                        .updateCommentByTaskIdAndCmtId(taskId, commentId, commentText)
-                        .orElseThrow(() -> new CommentNotFoundException(taskId, commentId)));
+
+        commentRepository.findByTaskIDAndCmtID(taskId, commentId)
+                .orElseThrow(() -> new CommentNotFoundException(taskId, commentId));
+
+        return ResponseEntity.ok(
+                commentRepository
+                        .updateCommentByCmtId(taskId, commentId, commentText)
+        );
     }
 
     /**

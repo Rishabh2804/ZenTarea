@@ -1,15 +1,17 @@
 package spring.practice.zentarea.data.repo;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import spring.practice.zentarea.model.Task;
-import spring.practice.zentarea.model.TaskPriority;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.*;
+import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
+import spring.practice.zentarea.model.*;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-
-    List<Task> getAllByPriority(TaskPriority priority);
+    // TODO : figure out a way to use this and replace manual handling
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Transactional
+    @Query("UPDATE Task t SET t = :task WHERE t.taskId = :task_id")
+    int updateTaskByTaskId(@Param("task_id") Long taskId, Task task);
 }

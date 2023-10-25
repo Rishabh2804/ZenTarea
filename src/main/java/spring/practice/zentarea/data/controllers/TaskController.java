@@ -7,8 +7,6 @@ import spring.practice.zentarea.data.repo.*;
 import spring.practice.zentarea.model.*;
 import spring.practice.zentarea.utils.exceptions.*;
 
-import java.util.logging.*;
-
 @RestController
 @RequestMapping("/tasks")
 public final class TaskController {
@@ -29,8 +27,6 @@ public final class TaskController {
             produces = "application/json"
     )
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        Logger logger = Logger.getLogger(TaskController.class.getName());
-        logger.info("Creating task " + task.toString());
         return ResponseEntity.ok(taskRepository.save(task));
     }
 
@@ -57,7 +53,6 @@ public final class TaskController {
      * @param taskId     - the id of the task to update
      * @param updateTask - the updated task
      * @return {@link ResponseEntity}<{@link Task}>
-     * @throws TaskNotFoundException - if the task is not found
      */
     @PutMapping(value = "/{taskId}",
             produces = "application/json"

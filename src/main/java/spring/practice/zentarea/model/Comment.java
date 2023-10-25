@@ -1,12 +1,14 @@
 package spring.practice.zentarea.model;
 
 import jakarta.persistence.*;
-import org.springframework.lang.NonNull;
+import org.springframework.format.annotation.*;
+import org.springframework.lang.*;
 
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "comment")
+@SuppressWarnings("unused")
 public final class Comment {
 
     @Id
@@ -37,6 +39,7 @@ public final class Comment {
     }
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date date;
 
     public Date getDate() {
@@ -50,6 +53,11 @@ public final class Comment {
     public Comment(@NonNull Long taskId, String commentText) {
         this.taskId = taskId;
         this.comment = commentText;
+        this.date = new Date();
+    }
+
+    public void update(@NonNull Comment comment) {
+        this.comment = comment.getComment();
         this.date = new Date();
     }
 }

@@ -2,6 +2,7 @@ package spring.practice.zentarea.data.controllers;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
+import org.springframework.lang.*;
 import org.springframework.web.bind.annotation.*;
 import spring.practice.zentarea.data.repo.*;
 import spring.practice.zentarea.model.*;
@@ -15,6 +16,10 @@ public final class TaskController {
     @Autowired
     public TaskController(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
+    }
+
+    private void validateTask(@NonNull Long taskId) throws TaskNotFoundException {
+        if (!taskRepository.existsById(taskId)) throw new TaskNotFoundException(taskId);
     }
 
     /**
@@ -40,7 +45,9 @@ public final class TaskController {
     @GetMapping(value = "/{taskId}",
             produces = "application/json"
     )
-    public ResponseEntity<Task> getTask(@PathVariable Long taskId) throws TaskNotFoundException {
+    public ResponseEntity<Task> getTask(@PathVariable @NonNull Long taskId) throws TaskNotFoundException {
+        validateTask(taskId);
+
         return ResponseEntity.ok(
                 taskRepository.findById(taskId)
                         .orElseThrow(() -> new TaskNotFoundException(taskId))
@@ -73,7 +80,8 @@ public final class TaskController {
     @DeleteMapping(value = "/{taskId}",
             produces = "application/json"
     )
-    public void deleteTask(@PathVariable Long taskId) {
+    public void deleteTask(@PathVariable Long taskId) throws TaskNotFoundException {
+        validateTask(taskId);
         taskRepository.deleteById(taskId);
     }
 

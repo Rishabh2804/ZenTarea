@@ -6,7 +6,8 @@ import org.springframework.lang.*;
 import org.springframework.web.bind.annotation.*;
 import spring.practice.zentarea.data.repo.*;
 import spring.practice.zentarea.model.*;
-import spring.practice.zentarea.utils.exceptions.*;
+import spring.practice.zentarea.utils.exception_handling.exceptions.*;
+import spring.practice.zentarea.utils.logging.*;
 
 @RestController
 @RequestMapping("/tasks")
@@ -68,7 +69,9 @@ public final class TaskController {
         Task existingTask = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
 
         existingTask.update(updateTask);
-
+        ZenLogger.logI("Updated task with id " + taskId);
+        ZenLogger.logI("Updated task now:  " + existingTask);
+        
         return ResponseEntity.ok(taskRepository.save(existingTask));
     }
 

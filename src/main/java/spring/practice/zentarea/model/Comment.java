@@ -9,7 +9,7 @@ import java.util.*;
 @Entity
 @Table(name = "comment")
 @SuppressWarnings("unused")
-public final class Comment {
+public final class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

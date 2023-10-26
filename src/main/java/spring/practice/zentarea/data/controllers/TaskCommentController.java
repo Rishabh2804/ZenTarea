@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.*;
 import org.springframework.web.bind.annotation.*;
 import spring.practice.zentarea.data.repo.*;
 import spring.practice.zentarea.model.*;
-import spring.practice.zentarea.utils.exceptions.*;
+import spring.practice.zentarea.utils.exception_handling.exceptions.*;
 
 import java.util.*;
 

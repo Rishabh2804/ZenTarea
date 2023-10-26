@@ -8,7 +8,7 @@ import java.util.*;
 @Entity
 @Table(name = "task")
 @SuppressWarnings("unused")
-public class Task {
+public class Task extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")

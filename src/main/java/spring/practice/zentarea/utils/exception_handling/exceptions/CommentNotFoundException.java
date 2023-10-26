@@ -1,4 +1,4 @@
-package spring.practice.zentarea.utils.exceptions;
+package spring.practice.zentarea.utils.exception_handling.exceptions;
 
 public class CommentNotFoundException extends Exception {
 

@@ -1,7 +1,8 @@
-package spring.practice.zentarea.utils.exceptions;
+package spring.practice.zentarea.utils.exception_handling;
 
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import spring.practice.zentarea.utils.exception_handling.exceptions.*;
 
 @ControllerAdvice
 public class ZenExceptionHandler {

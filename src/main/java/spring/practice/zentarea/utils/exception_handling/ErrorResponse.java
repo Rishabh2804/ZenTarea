@@ -1,4 +1,4 @@
-package spring.practice.zentarea.utils.exceptions;
+package spring.practice.zentarea.utils.exception_handling;
 
 import org.springframework.http.*;
 
@@ -8,7 +8,7 @@ public class ErrorResponse {
     private final Date timestamp;
     private HttpStatus status;
     private String error;
-    
+
     public ErrorResponse() {
         this.timestamp = new Date();
     }

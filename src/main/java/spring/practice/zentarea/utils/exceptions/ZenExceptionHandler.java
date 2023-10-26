@@ -1,18 +1,22 @@
 package spring.practice.zentarea.utils.exceptions;
 
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice
 public class ZenExceptionHandler {
 
     @ExceptionHandler(value = TaskNotFoundException.class)
-    public String TaskNotFoundExceptionHandler(TaskNotFoundException ex) {
-        return ex.getMessage();
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse TaskNotFoundExceptionHandler(TaskNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = CommentNotFoundException.class)
-    public String CommentNotFoundExceptionHandler(CommentNotFoundException ex) {
-        return ex.getMessage();
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse CommentNotFoundExceptionHandler(CommentNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

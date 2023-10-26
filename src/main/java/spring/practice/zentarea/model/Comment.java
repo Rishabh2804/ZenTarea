@@ -46,6 +46,7 @@ public final class Comment {
         return date;
     }
 
+    // TODO : Remove or modify this constructor
     public Comment() {
         this.taskId = null;
     }

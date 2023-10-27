@@ -8,7 +8,7 @@ import spring.practice.zentarea.model.*;
 
 import java.util.*;
 
-@Repository
+@Repository("commentRepository")
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     /**

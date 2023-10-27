@@ -6,7 +6,7 @@ import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 import spring.practice.zentarea.model.*;
 
-@Repository
+@Repository("taskRepository")
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     // TODO : figure out a way to use this and replace manual handling

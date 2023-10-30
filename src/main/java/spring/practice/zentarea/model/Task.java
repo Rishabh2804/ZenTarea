@@ -20,11 +20,19 @@ public class Task extends BaseEntity {
 
     private String title;
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getTitle() {
         return title;
     }
 
     private String description;
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getDescription() {
         return description;
@@ -34,11 +42,19 @@ public class Task extends BaseEntity {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date dueDate;
 
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
     public Date getDueDate() {
         return dueDate;
     }
 
     private String status;
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getStatus() {
         return status;
@@ -55,7 +71,7 @@ public class Task extends BaseEntity {
     // else default implementation will be followed for setting the value
     // for the priority field
     public void setPriority(String priority) {
-        this.priority = TaskPriority.parse(priority);
+        this.priority = TaskPriority.resolve(priority);
     }
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -68,6 +84,31 @@ public class Task extends BaseEntity {
 
     public Task() {
         priority = TaskPriority.MEDIUM;
+    }
+
+    public Task(String title, String description, Date dueDate, String status, Object priority) {
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.status = status;
+        this.priority = TaskPriority.resolve(priority);
+    }
+
+    @Override
+    public Object clone() {
+        Task task;
+        try {
+            task = (Task) super.clone();
+        } catch (CloneNotSupportedException e) {
+            task = new Task(
+                    this.getTitle(),
+                    this.getDescription(),
+                    this.getDueDate(),
+                    this.getStatus(),
+                    this.getPriority()
+            );
+        }
+        return task;
     }
 
     public void update(Task updateTask) {

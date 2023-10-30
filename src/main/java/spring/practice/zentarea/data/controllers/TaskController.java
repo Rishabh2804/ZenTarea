@@ -33,7 +33,10 @@ public final class TaskController {
             produces = "application/json"
     )
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        return ResponseEntity.ok(taskRepository.save(task));
+        taskRepository.save(task);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(taskRepository.save(task));
     }
 
     /**

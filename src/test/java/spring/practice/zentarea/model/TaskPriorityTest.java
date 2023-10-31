@@ -26,6 +26,9 @@ class TaskPriorityTest {
     @Test
     void testResolve() {
         for (TaskPriority priority : TaskPriority.values()) {
+            // Object based check
+            assertEquals(priority, TaskPriority.resolve(priority));
+
             // UpperCase check --> "priority": "HIGH"
             String uppercase = priority.toString().toUpperCase();
             assertEquals(priority, TaskPriority.resolve(uppercase));

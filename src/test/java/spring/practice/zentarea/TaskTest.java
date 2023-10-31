@@ -44,15 +44,15 @@ public final class TaskTest {
         TEST_TASKS_JSON = new String[]
         {
             "{ " +
-                "\"title\": \"Task 3\", " +
-                " \"description\": \"This is the task #3\", " +
+                "\"title\": \"Task 1\", " +
+                " \"description\": \"This is the task #1\", " +
                 " \"dueDate\": \"2021-10-10T00:00:00.000+00:00\", " +
                 " \"status\": \"In Progress\", " +
                 "\"priority\": \"high\" " +
            "}",
             "{ " +
-                "\"title\": \"Task 3\", " +
-                " \"description\": \"This is the task #3\", " +
+                "\"title\": \"Task 2\", " +
+                " \"description\": \"This is the task #2\", " +
                 " \"dueDate\": \"2021-10-10T00:00:00.000+00:00\", " +
                 " \"status\": \"In Progress\", " +
                 "\"priority\": \"Low\" " +

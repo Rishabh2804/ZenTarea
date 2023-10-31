@@ -70,7 +70,7 @@ public class Task extends BaseEntity {
     // Setter necessary for custom editor,
     // else default implementation will be followed for setting the value
     // for the priority field
-    public void setPriority(String priority) {
+    public void setPriority(Object priority) {
         this.priority = TaskPriority.resolve(priority);
     }
 

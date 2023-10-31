@@ -2,16 +2,21 @@ package spring.practice.zentarea.data.controllers;
 
 import com.fasterxml.jackson.databind.*;
 import org.junit.jupiter.api.*;
-import org.junit.runner.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.autoconfigure.web.servlet.*;
 import org.springframework.boot.test.context.*;
+import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.*;
 import org.springframework.test.web.servlet.*;
 import spring.practice.zentarea.*;
+import spring.practice.zentarea.controllers.*;
+import spring.practice.zentarea.data.service.*;
 import spring.practice.zentarea.model.*;
+import spring.practice.zentarea.utils.annotations.*;
 
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -24,10 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *   and a way to use former in place of latter</li>
  *  </ul>
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-class TaskControllerTests {
+@WebMvcTest(TaskController.class)
+public class TaskControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,9 +38,14 @@ class TaskControllerTests {
     @Autowired
     ObjectMapper objectMapper;
 
+    @MockBean
+    private TaskService taskService;
+
     @Test
+    @Done(date = "2021-10-30")
     void testCreateTask() throws Exception {
         for (Task task : TaskTest.TASKS) {
+            when(taskService.createTask(any(Task.class))).thenReturn(task);
 
             String taskJson = objectMapper.writeValueAsString(task);
             mockMvc.perform(post("/tasks")

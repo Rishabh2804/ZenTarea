@@ -1,4 +1,4 @@
-package spring.practice.zentarea.utils.exception_handling;
+package spring.practice.zentarea.utils.exceptions.handling;
 
 import org.springframework.http.*;
 

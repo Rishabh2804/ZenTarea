@@ -1,4 +1,4 @@
-package spring.practice.zentarea.utils.exception_handling.exceptions;
+package spring.practice.zentarea.utils.exceptions;
 
 public class TaskNotFoundException extends Exception {
 

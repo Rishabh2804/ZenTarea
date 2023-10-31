@@ -13,7 +13,6 @@ import spring.practice.zentarea.*;
 import spring.practice.zentarea.controllers.*;
 import spring.practice.zentarea.data.service.*;
 import spring.practice.zentarea.model.*;
-import spring.practice.zentarea.utils.annotations.*;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -42,7 +41,6 @@ public class TaskControllerTest {
     private TaskService taskService;
 
     @Test
-    @Done(date = "2021-10-30")
     void testCreateTask() throws Exception {
         for (Task task : TaskTest.TASKS) {
             when(taskService.createTask(any(Task.class))).thenReturn(task);

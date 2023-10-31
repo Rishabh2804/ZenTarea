@@ -1,48 +1,24 @@
-package spring.practice.zentarea.data.controllers;
+package spring.practice.zentarea.controllers;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.transaction.annotation.*;
 import org.springframework.web.bind.annotation.*;
-import spring.practice.zentarea.data.repo.*;
+import spring.practice.zentarea.data.service.*;
 import spring.practice.zentarea.model.*;
-import spring.practice.zentarea.utils.exception_handling.exceptions.*;
+import spring.practice.zentarea.utils.exceptions.*;
 
 import java.util.*;
 
 @RestController
 @RequestMapping("tasks/{taskId}/comments")
 public class TaskCommentController {
-    private final CommentRepository commentRepository;
+
+    private final CommentService commentService;
 
     @Autowired
-    public TaskCommentController(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
-
-    /**
-     * Validates the existence of a task
-     *
-     * @param taskId the id of the task to validate
-     * @throws TaskNotFoundException if the task is not found
-     */
-    private void validateTask(Long taskId) throws TaskNotFoundException {
-        commentRepository.existsTask(taskId)
-                .orElseThrow(() -> new TaskNotFoundException(taskId));
-    }
-
-    /**
-     * Validates the existence of a comment
-     *
-     * @param taskId    the id of the task to validate
-     * @param commentId the id of the comment to validate
-     * @throws TaskNotFoundException    if the task is not found
-     * @throws CommentNotFoundException if the comment is not found, or is not associated with given taskId
-     */
-    private void validateComment(Long taskId, Long commentId) throws TaskNotFoundException, CommentNotFoundException {
-        validateTask(taskId);
-        commentRepository.existsByTaskIdAndCmtId(taskId, commentId)
-                .orElseThrow(() -> new CommentNotFoundException(taskId, commentId));
+    public TaskCommentController(CommentService commentService) {
+        this.commentService = commentService;
     }
 
     /**
@@ -54,11 +30,8 @@ public class TaskCommentController {
      **/
     @PostMapping(produces = "application/json")
     public ResponseEntity<Comment> addCommentToTask(@RequestBody String commentText, @PathVariable Long taskId) throws TaskNotFoundException {
-        validateTask(taskId);
-
-        return ResponseEntity.ok(commentRepository.save(
-                new Comment(taskId, commentText)
-        ));
+        return ResponseEntity
+                .ok(commentService.addCommentToTask(commentText, taskId));
     }
 
     /**
@@ -72,9 +45,8 @@ public class TaskCommentController {
             produces = "application/json"
     )
     public ResponseEntity<List<Comment>> getCommentsForTask(@PathVariable Long taskId) throws TaskNotFoundException {
-        validateTask(taskId);
         return ResponseEntity
-                .ok(commentRepository.findByTaskID(taskId));
+                .ok(commentService.getAllCommentsForTask(taskId));
     }
 
     /**
@@ -94,14 +66,8 @@ public class TaskCommentController {
             @PathVariable Long commentId,
             @RequestBody String commentText
     ) throws CommentNotFoundException, TaskNotFoundException {
-        validateComment(taskId, commentId);
-
-        commentRepository.findByTaskIDAndCmtID(taskId, commentId)
-                .orElseThrow(() -> new CommentNotFoundException(taskId, commentId));
-
         return ResponseEntity.ok(
-                commentRepository
-                        .updateCommentByCmtId(taskId, commentId, commentText)
+                commentService.updateCommentForTask(taskId, commentId, commentText)
         );
     }
 
@@ -116,8 +82,7 @@ public class TaskCommentController {
             produces = "application/json"
     )
     public void deleteComment(@PathVariable Long taskId, @PathVariable Long commentId) throws CommentNotFoundException, TaskNotFoundException {
-        validateComment(taskId, commentId);
-        commentRepository.deleteCommentByTaskIdAndCmtId(taskId, commentId);
+        commentService.deleteComment(taskId, commentId);
     }
 
     /**
@@ -131,7 +96,6 @@ public class TaskCommentController {
             produces = "application/json"
     )
     public void deleteAllCommentsForTask(@PathVariable Long taskId) throws TaskNotFoundException {
-        validateTask(taskId);
-        commentRepository.deleteAllByTaskId(taskId);
+        commentService.deleteAllCommentsForTask(taskId);
     }
 }

@@ -1,26 +1,22 @@
-package spring.practice.zentarea.data.controllers;
+package spring.practice.zentarea.controllers;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.lang.*;
 import org.springframework.web.bind.annotation.*;
-import spring.practice.zentarea.data.repo.*;
+import spring.practice.zentarea.data.service.*;
 import spring.practice.zentarea.model.*;
-import spring.practice.zentarea.utils.exception_handling.exceptions.*;
-import spring.practice.zentarea.utils.logging.*;
+import spring.practice.zentarea.utils.exceptions.*;
 
 @RestController
 @RequestMapping("/tasks")
 public final class TaskController {
-    private final TaskRepository taskRepository;
+
+    private final TaskService taskService;
 
     @Autowired
-    public TaskController(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
-
-    private void validateTask(@NonNull Long taskId) throws TaskNotFoundException {
-        if (!taskRepository.existsById(taskId)) throw new TaskNotFoundException(taskId);
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     /**
@@ -33,10 +29,9 @@ public final class TaskController {
             produces = "application/json"
     )
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        taskRepository.save(task);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(taskRepository.save(task));
+                .body(taskService.createTask(task));
     }
 
     /**
@@ -50,12 +45,7 @@ public final class TaskController {
             produces = "application/json"
     )
     public ResponseEntity<Task> getTask(@PathVariable @NonNull Long taskId) throws TaskNotFoundException {
-        validateTask(taskId);
-
-        return ResponseEntity.ok(
-                taskRepository.findById(taskId)
-                        .orElseThrow(() -> new TaskNotFoundException(taskId))
-        );
+        return ResponseEntity.ok(taskService.getTask(taskId));
     }
 
     /**
@@ -69,13 +59,7 @@ public final class TaskController {
             produces = "application/json"
     )
     public ResponseEntity<Task> updateTask(@PathVariable Long taskId, @RequestBody Task updateTask) throws TaskNotFoundException {
-        Task existingTask = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
-
-        existingTask.update(updateTask);
-        ZenLogger.logI("Updated task with id " + taskId);
-        ZenLogger.logI("Updated task now:  " + existingTask);
-        
-        return ResponseEntity.ok(taskRepository.save(existingTask));
+        return ResponseEntity.ok(taskService.updateTask(taskId, updateTask));
     }
 
     /**
@@ -87,8 +71,7 @@ public final class TaskController {
             produces = "application/json"
     )
     public void deleteTask(@PathVariable Long taskId) throws TaskNotFoundException {
-        validateTask(taskId);
-        taskRepository.deleteById(taskId);
+        taskService.deleteTask(taskId);
     }
 
 

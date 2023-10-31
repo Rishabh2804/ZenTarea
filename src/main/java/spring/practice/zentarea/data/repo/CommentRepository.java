@@ -35,6 +35,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("UPDATE Comment c SET c.comment = :commentText WHERE c.taskId = :task_id AND c.cmtId = :cmt_id")
     int updateCommentByCmtId(@Param("task_id") Long taskId, @Param("cmt_id") Long cmtId, String commentText);
 
+    @Transactional
     void deleteAllByTaskId(@Param("task_id") Long taskId);
 
     void deleteCommentByTaskIdAndCmtId(@Param("task_id") Long taskId, @Param("cmt_id") Long cmtId);

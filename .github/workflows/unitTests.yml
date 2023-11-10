@@ -1,0 +1,19 @@
+name: Spring Boot Unit Tests
+
+on:
+  pull_request:
+  branch_protection_rule: { types: [ created, deleted ] }
+  check_run:
+    types:
+      - created
+      - rerequested
+
+jobs:
+  unitTest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: Rishabh2804/Zentarea/.github/workflows/build.yml@main
+
+      - name: Run Tests
+        run: ./gradlew test --stacktrace

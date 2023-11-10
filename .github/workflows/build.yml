@@ -1,11 +1,11 @@
 name: Spring Boot Build
 
-on: push
+on:
+  workflow_call:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 20.0.1

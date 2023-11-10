@@ -25,6 +25,9 @@ dependencies {
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     runtimeOnly("mysql:mysql-connector-java:8.0.33")
 
+    // H2 database
+    runtimeOnly("com.h2database:h2")
+
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     implementation("org.hibernate:hibernate-core:6.2.9.Final")
 

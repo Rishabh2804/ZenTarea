@@ -1,10 +1,15 @@
 name: Spring Boot Build
 
 on:
-  workflow_call:
+  pull_request:
+  branch_protection_rule: { types: [ created, deleted ] }
+  check_run:
+    types:
+      - created
+      - rerequested
 
 jobs:
-  build:
+  gradle-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,7 +17,27 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 20.0.1
+          cache: 'gradle'
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
       - name: Build with Gradle
         run: ./gradlew build  --stacktrace
+
+  unit-test:
+    needs: gradle-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 20.0.1
+        uses: actions/setup-java@v1
+        with:
+          java-version: 20.0.1
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run Tests
+        run: ./gradlew test --stacktrace

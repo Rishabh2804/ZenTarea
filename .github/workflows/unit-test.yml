@@ -3,18 +3,12 @@ name: Spring Boot Unit Tests
 on:
   pull_request:
   branch_protection_rule:
-    types: [ created, deleted ]
-  check_run:
-    types:
-      - created
-      - rerequested
+    branches: [ dev, main ]
+  workflow_dispatch: # Manually run the workflow
 
 jobs:
   unit-test:
     runs-on: ubuntu-latest
-
-    outputs:
-      job-status: ${{ steps.run-tests.outputs.job-status }}
 
     steps:
       - name: Checkout code

@@ -1,7 +1,11 @@
 name: Spring Boot Build
 
 on:
+  pull_request:
+  branch_protection_rule:
+    branches: [ dev, main ]
   workflow_call:
+  workflow_dispatch: # Manually run the workflow
 
 jobs:
   gradle-build:

@@ -39,15 +39,6 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      - name: Checkout code
-        if: steps.gradle-cache-restore.outputs.cache-hit != 'true'
-        uses: actions/checkout@v2
-
-      - name: Rerun build job
-        if: steps.gradle-cache-restore.outputs.cache-hit != 'true'
-        uses: ./.github/workflow/build.yml
-        continue-on-error: false
-
       - name: Run Tests
         id: run-tests
         run: ./gradlew test --stacktrace

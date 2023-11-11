@@ -1,0 +1,38 @@
+name: Spring Boot Build
+
+on:
+  pull_request:
+  branch_protection_rule:
+    branches: [ dev, main ]
+  workflow_call:
+  workflow_dispatch: # Manually run the workflow
+
+jobs:
+  gradle-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 20.0.1
+        uses: actions/setup-java@v1
+        with:
+          java-version: 20.0.1
+
+      - name: Cache Gradle dependencies
+        id: gradle-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build --stacktrace

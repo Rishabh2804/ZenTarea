@@ -22,8 +22,8 @@ dependencies {
     // Jetbrains annotation library
     implementation("org.jetbrains:annotations:24.0.0")
 
-    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    runtimeOnly("mysql:mysql-connector-java:8.0.33")
+    // microsoft sql server
+    implementation("com.microsoft.sqlserver:mssql-jdbc")
 
     // H2 database
     runtimeOnly("com.h2database:h2")

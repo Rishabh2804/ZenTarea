@@ -4,6 +4,7 @@ import org.springframework.http.*;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class ErrorResponse {
     private final Date timestamp;
     private HttpStatus status;

@@ -4,7 +4,6 @@ import spring.practice.zentarea.model.*;
 
 import java.util.*;
 
-@SuppressWarnings("ALL")
 public final class TaskTest {
 
     public static final List<Task> TASKS = new ArrayList<>();

@@ -6,7 +6,6 @@ import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 import spring.practice.zentarea.model.*;
 
-@SuppressWarnings("unused")
 @Repository("taskRepository")
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
@@ -16,4 +15,3 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("UPDATE Task t SET t = :task WHERE t.taskId = :task_id")
     int updateTaskByTaskId(@Param("task_id") Long taskId, Task task);
 }
-

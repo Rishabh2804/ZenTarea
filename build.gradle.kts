@@ -27,6 +27,9 @@ dependencies {
 
     // H2 database
     runtimeOnly("com.h2database:h2")
+    
+    // Amazon Redshift JDBC driver
+    runtimeOnly("com.amazon.redshift:redshift-jdbc42:2.1.0.24")
 
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     implementation("org.hibernate:hibernate-core:6.2.9.Final")

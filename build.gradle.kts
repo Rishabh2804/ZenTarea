@@ -19,6 +19,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    // MongoDB support
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+
     // Jetbrains annotation library
     implementation("org.jetbrains:annotations:24.0.0")
 

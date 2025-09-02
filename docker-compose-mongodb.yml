@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  zentarea-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=mongodb
+      - MONGODB_URI=mongodb://mongo-db:27017/zentarea
+      - MONGODB_DATABASE=zentarea
+    depends_on:
+      - mongo-db
+    networks:
+      - zentarea-network
+
+  mongo-db:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=zentarea
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - zentarea-network
+
+volumes:
+  mongo_data:
+
+networks:
+  zentarea-network:
+    driver: bridge

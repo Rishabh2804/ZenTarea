@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  zentarea-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=azure-mysql
+      - AZURE_MYSQL_URL=jdbc:mysql://mysql-db:3306/zentareadb
+      - AZURE_MYSQL_USERNAME=zentarea_user
+      - AZURE_MYSQL_PASSWORD=zentarea_pass
+    depends_on:
+      - mysql-db
+    networks:
+      - zentarea-network
+
+  mysql-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=zentareadb
+      - MYSQL_USER=zentarea_user
+      - MYSQL_PASSWORD=zentarea_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - zentarea-network
+
+volumes:
+  mysql_data:
+
+networks:
+  zentarea-network:
+    driver: bridge
